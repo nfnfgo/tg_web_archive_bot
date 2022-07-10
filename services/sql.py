@@ -1,0 +1,1 @@
+# About asyncio https://aiomysql.readthedocs.io/en/latest/pool.html
