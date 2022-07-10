@@ -3,7 +3,7 @@ import telebot.async_telebot as telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-def gen_markup(row_width, botton_list):
+def gen_markup(botton_list,row_width=2):
     markup = InlineKeyboardMarkup()
     markup.row_width = row_width
     for botton in botton_list:
