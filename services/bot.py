@@ -1,4 +1,6 @@
-import telebot.async_telebot as telebot
+from telebot.async_telebot import AsyncTeleBot
 import asyncio
 
-bot = telebot.AsyncTeleBot
+import config
+
+bot = AsyncTeleBot(config.bot_token)
