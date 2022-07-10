@@ -15,3 +15,12 @@ always_install_req=False
 
 # Seperate Format
 sepa = '————————————————'
+
+# -----------------------------------------
+
+# Database host
+sql_host='SQL_HOST'
+sql_port=3306
+sql_user='SQL_USER'
+sql_password='SQL_PASSWORD'
+sql_db='SQL_DB'
