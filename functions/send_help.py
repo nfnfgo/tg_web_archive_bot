@@ -17,4 +17,5 @@ async def send_help(message,bot):
     get_update_markup=botton.gen_markup([['检查更新','check_update']])
     await bot.reply_to(message,help_text,reply_markup=get_update_markup)
 
-async def get_update(message,bot):
+async def get_update(call,bot):
+    bot.answer_callback_query(call.id,'已经是最新版本')
