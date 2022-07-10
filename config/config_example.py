@@ -6,6 +6,7 @@
 # Bot display name
 bot_disp_name='WebArchiveBot'
 bot_username='web_archive_bot' # DO NOT contain '@'
+bot_version='0.0.0 Non-released'
 
 # Your Telegram Bot token, you can get it by @BotFather
 bot_token='BOT_TOKEN'
