@@ -25,7 +25,7 @@ if __name__=='__main__':
             break
 
     # rewrite part
-    rv_list=['BOT_TOKEN','SQL_HOST','SQL_USER','SQL_PASSWORD','SQL_DB'] # define what keywords should be rewrite
+    rv_list=['BOT_TOKEN','BOT_ADMIN','SQL_HOST','SQL_USER','SQL_PASSWORD','SQL_DB'] # define what keywords should be rewrite
     res_dict={} # use to storage result
     for vari in rv_list:
         value=GetEnvVar(vari)
