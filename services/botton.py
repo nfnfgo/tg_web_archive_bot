@@ -4,10 +4,11 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, Message, B
 
 
 def gen_markup(botton_list, row_width=2):
-    markup = InlineKeyboardMarkup()
-    markup.row_width = row_width
-    for botton in botton_list:
-        markup.add(InlineKeyboardButton(botton[0], callback_data=botton[1]))
+    buttons = []
+    for i in botton_list:
+        button = InlineKeyboardButton(text=i, callback_data=i)
+        buttons.append(button)
+    markup.add(*buttons)
     return markup
 
 # delete a markup of a message (unavailable when message is too old)

@@ -20,8 +20,8 @@ bot.register_callback_query_handler(send_help.get_update, func=lambda query: que
 bot.register_message_handler(archive.archive_url, commands=['archive','save','a','s'],pass_bot=True)
 
 # catch all message
-bot.register_message_handler(archive.archive_url, content_types=['text'], pass_bot=True)
+bot.register_message_handler(archive.archive_url_from_text, content_types=['text'], pass_bot=True)
 # 二次确认 cbq
-bot.register_callback_query_handler(archive.cbq_confirm_archive, func=lambda query: query.data == 'archive_continue_archive', pass_bot=True)
+bot.register_callback_query_handler(archive.cbq_confirm_archive, func=lambda query: query.data in ['archive_continue_archive','archive_stop_archive'], pass_bot=True)
 
 asyncio.run(bot.infinity_polling())
