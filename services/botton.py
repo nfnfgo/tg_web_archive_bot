@@ -5,8 +5,9 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, Message, B
 
 def gen_markup(botton_list, row_width=2):
     buttons = []
+    markup=InlineKeyboardMarkup()
     for i in botton_list:
-        button = InlineKeyboardButton(text=i, callback_data=i)
+        button = InlineKeyboardButton(i[0], callback_data=i[1])
         buttons.append(button)
     markup.add(*buttons)
     return markup
