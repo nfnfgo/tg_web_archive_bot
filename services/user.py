@@ -78,3 +78,7 @@ class StatusUser():
         Instead it will delete the whole status_info dictionary 
         of this user, and delete it from users_status_info global list
         '''
+        try:
+            del self.users_status_info[self.id]
+        except Exception as e:
+            print('service/user.py Failed to delete a whole user status_info',e)
