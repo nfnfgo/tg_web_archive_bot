@@ -1,1 +1,0 @@
-https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/step_example.py 连续时间注册器，貌似可以引导用户进行链式访问
