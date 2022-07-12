@@ -64,7 +64,10 @@ async def archive_url_from_text(message, bot):
         return
     url = check_url(url)
     confirm_msg = await bot.reply_to(message,f'⚠️*是否继续归档*\n*网址*{url}\n\nTips: 通过 /s 指令发出网页归档无需二次确认',reply_markup=text_active_confirm)
-    user_status.set_status_info(archive_confirm_msg=confirm_msg)
+    try:
+        user_status.set_status_info(archive_confirm_msg=confirm_msg)
+    except:
+        pass
     try:
         url_dict[message.from_user.id] = url
         print(url_dict)

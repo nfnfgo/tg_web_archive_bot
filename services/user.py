@@ -51,19 +51,18 @@ class UserStatus():
         try:
             self.status_info = self.users_status_info[self.id]
         except:
-            self.status_info = None
+            self.status_info = {} # 如果用户并没有status，则创建空字典，方便后期写入
         finally:
             return self.status_info
 
-    def set_status_info(self, **kwargs):
+    def set_status_info(self,dict):
         '''
         Set a user status.
 
         You can pass a key with empty str or None to delete it, and if it doesn't exist, raise exception
         '''
-        print('kwargs:',kwargs)
         timestamp = time.time()
-        for item in kwargs.items():
+        for item in dict.items():
             print('ok,successful to iterate kwargs')
             if (item[1] is None) or (item[1] == ''):
                 try:
