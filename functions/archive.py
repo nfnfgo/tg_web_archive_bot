@@ -30,27 +30,28 @@ async def archive_url(message, bot):
         await bot.reply_to(message, '❌*信息读取错误*\n请检查您是否已经在指令后加入正确的网址')
         return
     url = check_url(url)
-    await bot.reply_to(message, f'📸*正在存档...* (新页面时间较长，请耐心等待)\n{url}')
+    archiving_message = await bot.reply_to(message, f'📸*正在存档...* (新页面时间较长，请耐心等待)\n{url}')
 
     # start to archive webpage by using aiohttp
     async with aiohttp.ClientSession() as session:
         async with session.get('https://web.archive.org/save/'+url) as res:
+            # delete archiving msg
+            await bot.delete_message(archiving_message.chat.id,archiving_message.message_id)
             if res.status == 200:
-                await bot.reply_to(message, f'*✅成功归档*\n[归档页面地址](https://web.archive.org/save/{url})')
+                await bot.send_message(message.from_user.id, f'*✅成功归档*\n[归档页面地址](https://web.archive.org/save/{url})')
             elif res.status == 520:
-                await bot.reply_to(message, '❌*归档未完成*\nWebArchive服务器出现未知错误，未能完成归档请求')
+                await bot.send_message(message.from_user.id, '❌*归档未完成*\nWebArchive服务器出现未知错误，未能完成归档请求')
             elif res.status == 404:
-                await bot.reply_to(message, '❌*归档未完成*\n网址解析失败，可能为填写的网址不规范或机器人内部发生错误')
+                await bot.send_message(message.from_user.id, '❌*归档未完成*\n网址解析失败，可能为填写的网址不规范或机器人内部发生错误')
             else:
-                await bot.reply_to(message, '❌*归档未完成*\n请求出错')
+                await bot.send_message(message.from_user.id, '❌*归档未完成*\n请求出错')
 
 # 用户直接发送消息时
-
-
 async def archive_url_from_text(message, bot):
     print('into the from text function')
     user_status = UserStatus(message=message)
     try:
+        # If user has unconfirmed msg, delete it.(Because only new one should be archived)
         old_message = user_status.status_info['archive_confirm_msg'][0]
         await bot.delete_message(old_message.chat.id, old_message.message_id)
         user_status.set_status_info(archive_warn_msg='')
@@ -80,15 +81,14 @@ async def archive_url_from_text(message, bot):
 # 接受用户的确认/取消消息并做出响应
 async def cbq_confirm_archive(call, bot):
     print('into the cbq deal function')
-    await botton.del_botton(call, bot)
     print('okok del')
 
     if call.data == 'archive_continue_archive':
 
         # If user confirm archive action, the confirm msg should be deleted
         user_status = UserStatus(call=call)
-        archive_confirm_msg = user_status.status_info['archive_confrim_msg'][0]
-        await bot.delete_message(archive_confirm_msg.chat.id, archive_confirm_msg.from_user.id)
+        archive_confirm_msg = user_status.status_info['archive_confirm_msg'][0]
+        await bot.delete_message(archive_confirm_msg.chat.id, archive_confirm_msg.message_id)
         user_status.set_status_info({'archive_confirm_msg':''})
 
         print('okok before url')
@@ -98,17 +98,18 @@ async def cbq_confirm_archive(call, bot):
             print('Failed to read url', e)
         print('after url read')
         await bot.answer_callback_query(call.id, '')
-        await bot.reply_to(call.message, f'📸*正在存档...* (新页面时间较长，请耐心等待)\n{url}')
+        message = await bot.send_message(call.from_user.id, f'📸*正在存档...* (新页面时间较长，请耐心等待)\n{url}')
         async with aiohttp.ClientSession() as session:
-            message = call.message
             async with session.get('https://web.archive.org/save/'+url, timeout=60.0) as res:
+                await bot.delete_message(message.chat.id,message.message_id)
                 if res.status == 200:
-                    await bot.reply_to(message, f'*✅成功归档*\n[归档页面地址](https://web.archive.org/save/{url})')
+                    await bot.send_message(call.from_user.id, f'*✅成功归档*\n[归档页面地址](https://web.archive.org/save/{url})')
                 elif res.status == 520:
-                    await bot.reply_to(message, '❌*归档未完成*\nWebArchive服务器出现未知错误，未能完成归档请求')
+                    await bot.send_message(call.from_user.id, '❌*归档未完成*\nWebArchive服务器出现未知错误，未能完成归档请求')
                 elif res.status == 404:
-                    await bot.reply_to(message, '❌*归档未完成*\n网址解析失败，可能为填写的网址不规范或机器人内部发生错误')
+                    await bot.send_message(call.from_user.id, '❌*归档未完成*\n网址解析失败，可能为填写的网址不规范或机器人内部发生错误')
                 else:
-                    await bot.reply_to(message, '❌*归档未完成*\n请求出错')
+                    await bot.send_message(call.from_user.id, '❌*归档未完成*\n请求出错')
     else:
         await bot.answer_callback_query(call.id, '❎已取消')
+        await botton.del_botton(call, bot)
