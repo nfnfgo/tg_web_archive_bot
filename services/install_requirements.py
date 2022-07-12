@@ -16,6 +16,7 @@ async def install_requirements() -> None:
         subprocess.run('pip3 install aiohttp', shell=True)
         subprocess.run('pip3 install aiofiles', shell=True)
         subprocess.run('pip3 install pyTelegramBotAPI', shell=True)
+        subprocess.run('pip3 install aiomysql', shell=True)
     except Error as e:
         print(e)
     finally:
