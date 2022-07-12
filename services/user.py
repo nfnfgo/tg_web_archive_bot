@@ -16,7 +16,7 @@ class UserStatus():
             id = int(id)
         elif message is not None:
             self.id = int(message.from_user.id)
-        elif message is not None:
+        elif call is not None:
             self.id = int(call.from_user.id)
         else:
             raise Exception('Failed to initialize a user since no available id data')
@@ -33,7 +33,7 @@ class UserStatus():
             id = int(id)
         elif message is not None:
             self.id = int(message.from_user.id)
-        elif message is not None:
+        elif call is not None:
             self.id = int(call.from_user.id)
         else:
             raise Exception('Failed to initialize a user since no available id data')
@@ -71,7 +71,7 @@ class UserStatus():
                     print('service/user.py: Failed to del a status_key.', e)
                 continue
             self.status_info[item[0]] = [item[1], time.time()]
-        self.users_status_info[id] = self.status_info
+        self.users_status_info[self.id] = self.status_info
 
     def del_status_info(self):
         '''Delete **all** the status of a bot.

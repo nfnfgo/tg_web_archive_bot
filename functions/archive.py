@@ -49,24 +49,25 @@ async def archive_url(message, bot):
 
 async def archive_url_from_text(message, bot):
     print('into the from text function')
-    user_status=UserStatus(message=message)
+    user_status = UserStatus(message=message)
     try:
-        old_message=user_status.status_info['archive_confirm_msg'][0]
-        await bot.delete_message(old_message.chat.id,old_message.message_id)
-        await bot.reply_to(message,'⚠️检测到新链接，上一个未确认链接自动废除')
+        old_message = user_status.status_info['archive_confirm_msg'][0]
+        await bot.delete_message(old_message.chat.id, old_message.message_id)
         user_status.set_status_info(archive_warn_msg='')
     except:
         pass
     url = message.text
-    print('first we got url',url)
+    print('first we got url', url)
     if '.' not in url:
         await bot.reply_to(message, '❌*信息读取错误*\n请检查您是否已经在指令后加入正确的网址')
         return
     url = check_url(url)
-    confirm_msg = await bot.reply_to(message,f'⚠️*是否继续归档*\n*网址*{url}\n\nTips: 通过 /s 指令发出网页归档无需二次确认',reply_markup=text_active_confirm)
+    confirm_msg = await bot.reply_to(message, f'⚠️*是否继续归档*\n*网址*{url}\n\nTips: 通过 /s 指令发出网页归档无需二次确认', reply_markup=text_active_confirm)
+    # Write confrim_msg to status key 'archive_confirm_msg'
     try:
-        user_status.set_status_info(archive_confirm_msg=confirm_msg)
-    except:
+        user_status.set_status_info({'archive_confirm_msg': confirm_msg})
+    except Exception as e:
+        print('functions/archive.py Failed to write status into a user.', e)
         pass
     try:
         url_dict[message.from_user.id] = url
@@ -81,12 +82,20 @@ async def cbq_confirm_archive(call, bot):
     print('into the cbq deal function')
     await botton.del_botton(call, bot)
     print('okok del')
+
     if call.data == 'archive_continue_archive':
+
+        # If user confirm archive action, the confirm msg should be deleted
+        user_status = UserStatus(call=call)
+        archive_confirm_msg = user_status.status_info['archive_confrim_msg'][0]
+        await bot.delete_message(archive_confirm_msg.chat.id, archive_confirm_msg.from_user.id)
+        user_status.set_status_info({'archive_confirm_msg':''})
+
         print('okok before url')
         try:
             url = url_dict[call.from_user.id]
         except Exception as e:
-            print('Failed to read url',e)
+            print('Failed to read url', e)
         print('after url read')
         await bot.answer_callback_query(call.id, '')
         await bot.reply_to(call.message, f'📸*正在存档...* (新页面时间较长，请耐心等待)\n{url}')
