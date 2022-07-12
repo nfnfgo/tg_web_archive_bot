@@ -1,0 +1,13 @@
+# ignore python cache file
+*/*/__pycache__
+*/__pycache__
+/__pycache__
+
+# ignore config file
+*config.py
+
+# ignore .git
+/.git
+
+# ignore .vscode
+/.vscode
